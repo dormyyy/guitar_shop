@@ -1,0 +1,27 @@
+{% extends 'guitars/base.html' %}
+
+{% block content %}
+<h1>{{post.name}}</h1>
+<div class="article-panel">
+        <p class="first">Категорії:
+            {% for cat in post.category.all %}
+            {% if forloop.revcounter != 1%}
+            <a href="{{ cat.get_absolute_url }}">{{ cat.title }},</a>
+            {% else %}
+            <a href="{{ cat.get_absolute_url }}">{{ cat.title }}</a>
+            {% endif %}
+            {% endfor %}
+        </p>
+        <p class="last">Дата: {{ post.published_time|date:"d-m-Y H:i:s"}} | Автор: {{post.author.username}}</p>
+</div>
+
+
+{% if post.photo %}
+<p><img class="img-article-left" src="{{post.photo.url}}"></p>
+{% endif %}
+{{post.description|linebreaks}}
+<div class="add-to-cart">
+<p class="first"><b>{{ post.price }}$</b></p>
+<p class="last"><a href="{% url 'cart_add' post.id %}">Додати у корзину</a></p>
+</div>
+{% endblock %}

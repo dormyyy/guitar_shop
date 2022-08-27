@@ -1,0 +1,36 @@
+{% extends 'guitars/base.html' %}
+{% load cart_tag %}
+{% load guitars_tags %}
+{% block content %}
+
+<h1>{{ title }}</h1>
+<ul class="list-articles">
+    {% if request.session.cart|length > 0 %}
+    {% get_total request as total %}
+    {% for _,p in request.session.cart.items %}
+    {% get_description p.name as description %}
+    <li>
+        {% if p.image %}
+        <p><img class="img-article-left thumb1" src="{{ p.image }}"></p>
+        {% endif %}
+    <h3>{{ p.name }}</h3>
+    <p>{{ description|truncatewords:10 }}</p>
+
+        <h3>{{ p.price }}$</h3>
+        <br>
+        <p class="link-read-post1">
+            <a href="{% url 'item_clear' p.product_id %}">Видалити</a>
+            <a href="{% url 'post' p.product_slug %}">Детальніше</a>
+        </p>
+    </li>
+    {% endfor %}
+    <br>
+    <li><div class="article-panel">
+        <p class="first"><a href="{% url 'cart_clear' %}">Очистити корзину</a></p>
+        <p class="last"><span>Загальна ціна: <b>{{ total }}$</b> | </span><a href="{% url 'purchase' %}">Оформити покупку</a></p>
+    </div>
+    {% else %}
+    <h3>Корзина порожня</h3>
+    {% endif %}
+</ul>
+{% endblock %}
